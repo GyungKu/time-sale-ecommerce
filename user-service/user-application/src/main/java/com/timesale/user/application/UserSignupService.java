@@ -1,5 +1,6 @@
 package com.timesale.user.application;
 
+import com.timesale.user.application.port.PasswordEncryptor;
 import com.timesale.user.domain.User;
 import com.timesale.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserSignupService {
 
     private final UserRepository userRepository;
+    private final PasswordEncryptor passwordEncryptor;
 
     @Transactional
     public void signUp(String email, String password, String nickname) {
@@ -18,7 +20,8 @@ public class UserSignupService {
         if (userRepository.existsByEmail(email))
             throw new IllegalArgumentException("Email already in use");
 
-        // 비밀번호 암호화 (일단 생략)
+        // 비밀번호 암호화
+        password = passwordEncryptor.encrypt(password);
 
         // Entity 생성
         User user = User.builder()
