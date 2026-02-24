@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/time-sale-ecommerce.iml" filepath="$PROJECT_DIR$/time-sale-ecommerce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-api/user-service.user-api.iml" filepath="$PROJECT_DIR$/.idea/modules/user-api/user-service.user-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-api/user-service.user-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-api/user-service.user-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-infrastructure/user-service.user-infrastructure.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-infrastructure/user-service.user-infrastructure.main.iml" />
     </modules>
   </component>
 </project>
