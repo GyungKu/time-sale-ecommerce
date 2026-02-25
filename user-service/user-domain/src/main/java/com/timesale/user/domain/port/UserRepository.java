@@ -1,5 +1,6 @@
-package com.timesale.user.domain;
+package com.timesale.user.domain.port;
 
+import com.timesale.user.domain.User;
 import java.util.Optional;
 
 public interface UserRepository {

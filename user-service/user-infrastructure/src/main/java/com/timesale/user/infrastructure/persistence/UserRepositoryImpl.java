@@ -1,7 +1,7 @@
 package com.timesale.user.infrastructure.persistence;
 
 import com.timesale.user.domain.User;
-import com.timesale.user.domain.UserRepository;
+import com.timesale.user.domain.port.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
