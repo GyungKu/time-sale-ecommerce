@@ -20,3 +20,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+jwt:
+  secret: v3ry-s3cr3t-k3y-f0r-t1m3-s4l3-ec0mm3rc3-pr0j3ct
+  access-token-validity-in-seconds: 3600
