@@ -1,8 +1,10 @@
 package com.timesale.user.application;
 
+import com.timesale.common.exception.BusinessException;
 import com.timesale.user.application.port.PasswordEncryptor;
 import com.timesale.user.domain.User;
 import com.timesale.user.domain.UserRepository;
+import com.timesale.user.domain.exception.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ public class UserSignupService {
     public void signUp(String email, String password, String nickname) {
         // 이메일 중복 체크
         if (userRepository.existsByEmail(email))
-            throw new IllegalArgumentException("Email already in use");
+            throw new BusinessException(UserErrorCode.DUPLICATE_EMAIL);
 
         // 비밀번호 암호화
         password = passwordEncryptor.encrypt(password);

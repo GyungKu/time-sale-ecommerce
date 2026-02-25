@@ -3,9 +3,11 @@ package com.timesale.user.application;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import com.timesale.common.exception.BusinessException;
 import com.timesale.user.application.port.PasswordEncryptor;
 import com.timesale.user.domain.User;
 import com.timesale.user.domain.UserRepository;
+import com.timesale.user.domain.exception.UserErrorCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,8 +58,8 @@ class UserSignupServiceTest {
         given(userRepository.existsByEmail(email)).willReturn(true);
 
         Assertions.assertThatThrownBy(() -> userSignupService.signUp(email, rawPassword, nickname))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Email already in use");
+            .isInstanceOf(BusinessException.class)
+            .hasMessage(UserErrorCode.DUPLICATE_EMAIL.getMessage());
     }
 
 }
