@@ -1,4 +1,4 @@
-package com.timesale.user.api.exception;
+package com.timesale.product.api.exception;
 
 import com.timesale.common.exception.BusinessException;
 import com.timesale.common.exception.ErrorCode;
