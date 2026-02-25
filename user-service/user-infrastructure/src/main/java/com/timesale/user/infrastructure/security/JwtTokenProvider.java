@@ -36,4 +36,28 @@ public class JwtTokenProvider implements TokenProvider {
             .signWith(secretKey)
             .compact();
     }
+
+    @Override
+    public Boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Long getUserIdFromToken(String token) {
+        String subject = Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .getSubject();
+        return Long.valueOf(subject);
+    }
 }
