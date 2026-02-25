@@ -1,0 +1,12 @@
+plugins {
+    java
+}
+
+subprojects {
+    apply(plugin = "java")
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:1.18.42")
+        annotationProcessor("org.projectlombok:lombok:1.18.42")
+    }
+}
