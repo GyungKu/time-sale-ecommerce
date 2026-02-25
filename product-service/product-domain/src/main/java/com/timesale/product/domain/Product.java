@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -42,6 +43,14 @@ public class Product {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @Builder
+    public Product(String name, Integer price, Integer stockQuantity, LocalDateTime openAt) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.openAt = openAt;
+    }
 
     public void decreaseQuantity(int quantity) {
         if (stockQuantity < quantity)
