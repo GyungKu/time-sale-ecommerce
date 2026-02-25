@@ -4,7 +4,7 @@ import com.timesale.common.exception.BusinessException;
 import com.timesale.user.application.port.PasswordEncryptor;
 import com.timesale.user.application.port.TokenProvider;
 import com.timesale.user.domain.User;
-import com.timesale.user.domain.UserRepository;
+import com.timesale.user.domain.port.UserRepository;
 import com.timesale.user.domain.exception.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

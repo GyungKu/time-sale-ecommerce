@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":product-service:product-application"))
+    implementation(project(":product-service:product-domain"))
     implementation(project(":product-service:product-infrastructure"))
 
     implementation(project(":common:common-exception"))
