@@ -1,0 +1,8 @@
+dependencies {
+    implementation(project(":product-service:product-domain"))
+    implementation(project(":product-service:product-application"))
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql")
+    runtimeOnly("com.h2database:h2")
+}
