@@ -1,6 +1,8 @@
 package com.timesale.product.application;
 
+import com.timesale.common.exception.BusinessException;
 import com.timesale.product.domain.Product;
+import com.timesale.product.domain.exception.ProductErrorCode;
 import com.timesale.product.domain.port.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +33,22 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> getProducts() {
         return productRepository.findAll();
+    }
+
+    @Transactional
+    public void decreaseProductStock(Long productId, Integer quantity) {
+        Product product = getByIdWithPessimisticLock(productId);
+        product.decreaseQuantity(quantity);
+    }
+
+    private Product getById(Long productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new BusinessException(ProductErrorCode.NOT_FOUND));
+    }
+
+    private Product getByIdWithPessimisticLock(Long productId) {
+        return productRepository.findByIdWithPessimisticLock(productId)
+            .orElseThrow(() -> new BusinessException(ProductErrorCode.NOT_FOUND));
     }
 
 }

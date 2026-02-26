@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ProductErrorCode implements ErrorCode {
 
-    OUT_OF_STOCK(409, "P001", "재고가 부족합니다.");
+    OUT_OF_STOCK(409, "P001", "재고가 부족합니다."),
+    NOT_FOUND(404, "P002", "상품을 찾을 수 없습니다.");
 
     private final Integer status;
     private final String code;
