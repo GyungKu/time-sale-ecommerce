@@ -8,4 +8,6 @@ public interface ProductRepository {
     Product save(Product product);
     Optional<Product> findById(Long id);
     List<Product> findAll();
+    Optional<Product> findByIdWithPessimisticLock(Long id);
+    void deleteAll();
 }
