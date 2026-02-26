@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    // Use Case 호출을 위해 application 모듈 참조
     implementation(project(":user-service:user-application"))
     runtimeOnly(project(":user-service:user-infrastructure"))
     implementation(project(":common:common-exception"))
