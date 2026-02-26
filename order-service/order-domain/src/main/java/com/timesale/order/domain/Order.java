@@ -31,12 +31,6 @@ public class Order {
     private Long userId;
 
     @Column(nullable = false)
-    private Long productId;
-
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(nullable = false)
     private Integer totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -48,11 +42,8 @@ public class Order {
     private LocalDateTime createdAt;
 
     @Builder
-    public Order(Long userId, Long productId, Integer quantity, Integer totalPrice,
-        OrderStatus status) {
+    public Order(Long userId, Integer totalPrice, OrderStatus status) {
         this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.status = status;
     }
