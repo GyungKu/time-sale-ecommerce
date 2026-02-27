@@ -1,5 +1,6 @@
 package com.timesale.order.api.controller;
 
+import com.timesale.common.security.LoginUser;
 import com.timesale.order.api.dto.request.OrderCreateRequest;
 import com.timesale.order.application.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,11 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Long> placeOrder(@RequestBody OrderCreateRequest request) {
+    public ResponseEntity<Long> placeOrder(
+        @LoginUser Long userId,
+        @RequestBody OrderCreateRequest request) {
         Long orderId = orderService.placeOrder(
-            request.userId(),
+            userId,
             request.productId(),
             request.quantity(),
             request.orderPrice()
