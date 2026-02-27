@@ -50,12 +50,15 @@ public class DistributedLockAspect {
         String[] parameterNames = discoverer.getParameterNames(signature.getMethod());
         Object[] args = joinPoint.getArgs();
 
+        // 메소드의 모든 파라미터 이름과 들어온 인자값을 맞춰서 context에 넣어줌
         StandardEvaluationContext context = new StandardEvaluationContext();
         if (parameterNames != null) {
             for (int i = 0; i < parameterNames.length; i++) {
                 context.setVariable(parameterNames[i], args[i]);
             }
         }
+        // #id 같은 형식으로 들어온 것을 context에서 파라미터 이름과 매칭되는 것을 찾아서
+        // 값을 찾고 #id를 실제 인자값으로 대체해서 반환
         return parser.parseExpression(spel).getValue(context, String.class);
     }
 
