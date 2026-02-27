@@ -13,8 +13,8 @@ public class ProductLockFacade {
 
     public void decreaseStock(Long productId, Integer quantity) {
         String lockKey = "product:lock:" + productId;
-        distributedLockPort.executeWithLock(lockKey, () ->
-            productService.decreaseProductStock(productId, quantity));
+//        distributedLockPort.executeWithLock(lockKey, () ->
+//            productService.decreaseProductStock(productId, quantity));
     }
 
 }
