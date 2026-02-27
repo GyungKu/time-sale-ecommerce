@@ -1,6 +1,6 @@
 package com.timesale.user.infrastructure.security;
 
-import com.timesale.user.application.port.TokenProvider;
+import com.timesale.user.application.port.TokenGenerator;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtTokenProvider implements TokenProvider {
+public class JwtTokenGenerator implements TokenGenerator {
 
     private final SecretKey secretKey;
     private final Long accessTokenValidityInMilliseconds;
 
-    public JwtTokenProvider(
+    public JwtTokenGenerator(
         @Value("${jwt.secret}") String secret,
         @Value("${jwt.access-token-validity-in-seconds}") Long validityInSeconds) {
 
@@ -35,29 +35,5 @@ public class JwtTokenProvider implements TokenProvider {
             .expiration(validity)
             .signWith(secretKey)
             .compact();
-    }
-
-    @Override
-    public Boolean validateToken(String token) {
-        try {
-            Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @Override
-    public Long getUserIdFromToken(String token) {
-        String subject = Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getSubject();
-        return Long.valueOf(subject);
     }
 }

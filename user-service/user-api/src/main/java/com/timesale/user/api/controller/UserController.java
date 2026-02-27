@@ -1,14 +1,13 @@
 package com.timesale.user.api.controller;
 
+import com.timesale.common.security.LoginUser;
 import com.timesale.user.api.dto.request.LoginRequest;
 import com.timesale.user.api.dto.request.SignupRequest;
 import com.timesale.user.api.dto.response.LoginResponse;
-import com.timesale.user.api.security.LoginUser;
 import com.timesale.user.application.UserLoginService;
 import com.timesale.user.application.UserSignupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

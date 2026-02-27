@@ -1,8 +1,7 @@
-package com.timesale.user.api.security;
+package com.timesale.common.security;
 
 import com.timesale.common.exception.BusinessException;
 import com.timesale.common.exception.auth.AuthErrorCode;
-import com.timesale.user.application.port.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
@@ -17,7 +16,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final TokenProvider tokenProvider;
+    private final TokenValidator tokenValidator;
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
 
@@ -39,9 +38,9 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
         String token = bearerToken.substring(BEARER_PREFIX.length());
 
-        if (!tokenProvider.validateToken(token))
+        if (!tokenValidator.validateToken(token))
             throw new BusinessException(AuthErrorCode.INVALID_TOKEN);
 
-        return tokenProvider.getUserIdFromToken(token);
+        return tokenValidator.getUserIdFromToken(token);
     }
 }

@@ -1,4 +1,4 @@
-package com.timesale.user.api.security;
+package com.timesale.common.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

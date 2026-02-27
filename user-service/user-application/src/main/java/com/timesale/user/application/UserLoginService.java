@@ -2,7 +2,7 @@ package com.timesale.user.application;
 
 import com.timesale.common.exception.BusinessException;
 import com.timesale.user.application.port.PasswordEncryptor;
-import com.timesale.user.application.port.TokenProvider;
+import com.timesale.user.application.port.TokenGenerator;
 import com.timesale.user.domain.User;
 import com.timesale.user.domain.port.UserRepository;
 import com.timesale.user.domain.exception.UserErrorCode;
@@ -15,7 +15,7 @@ public class UserLoginService {
 
     private final UserRepository userRepository;
     private final PasswordEncryptor passwordEncryptor;
-    private final TokenProvider tokenProvider;
+    private final TokenGenerator tokenProvider;
 
     public String login(String email, String password) {
         User user = getByEmail(email);
