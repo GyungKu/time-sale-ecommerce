@@ -1,4 +1,4 @@
-package com.timesale.user.api.config;
+package com.timesale.order.api.config;
 
 import com.timesale.common.security.LoginArgumentResolver;
 import java.util.List;

@@ -2,6 +2,7 @@ rootProject.name = "time-sale-ecommerce"
 
 // Common 모듈들
 include("common:common-exception")
+include("common:common-security")
 
 // User 서비스 모듈들
 include("user-service:user-api")
