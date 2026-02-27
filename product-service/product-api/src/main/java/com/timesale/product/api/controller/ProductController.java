@@ -2,8 +2,8 @@ package com.timesale.product.api.controller;
 
 import com.timesale.product.api.dto.request.ProductCreateRequest;
 import com.timesale.product.api.dto.response.ProductResponse;
+import com.timesale.product.application.ProductLockFacade;
 import com.timesale.product.application.ProductService;
-import com.timesale.product.domain.Product;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductLockFacade productLockFacade;
 
     @PostMapping
     public ResponseEntity<Long> createProduct(@RequestBody ProductCreateRequest request) {
@@ -48,7 +49,7 @@ public class ProductController {
         @RequestParam("quantity") Integer quantity
     ) {
 
-        productService.decreaseProductStock(productId, quantity);
+        productLockFacade.decreaseStock(productId, quantity);
         return ResponseEntity.ok().build();
     }
 
