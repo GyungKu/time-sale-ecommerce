@@ -44,12 +44,19 @@ public class ProductController {
     }
 
     @PostMapping("/{id}/decrease-stock")
-    public ResponseEntity<?> decreaseStock(
-        @PathVariable("id") Long productId,
+    public ResponseEntity<?> decreaseStock(@PathVariable("id") Long productId,
         @RequestParam("quantity") Integer quantity
     ) {
 
         productService.decreaseProductStock(productId, quantity);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/increase-stock")
+    public ResponseEntity<?> increaseStock(@PathVariable("id") Long productId,
+        @RequestParam("quantity") Integer quantity) {
+
+        productService.increaseProductStock(productId, quantity);
         return ResponseEntity.ok().build();
     }
 

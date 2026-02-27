@@ -1,6 +1,7 @@
 dependencies {
     implementation(project(":order-service:order-domain"))
     implementation(project(":order-service:order-application"))
+    implementation(project(":common:common-exception"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")

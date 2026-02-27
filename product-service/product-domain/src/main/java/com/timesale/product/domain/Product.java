@@ -52,10 +52,14 @@ public class Product {
         this.openAt = openAt;
     }
 
-    public void decreaseQuantity(int quantity) {
+    public void decreaseStock(Integer quantity) {
         if (stockQuantity < quantity)
             throw new BusinessException(ProductErrorCode.OUT_OF_STOCK);
         stockQuantity -= quantity;
+    }
+
+    public void increaseStock(Integer quantity) {
+        stockQuantity += quantity;
     }
 
 }
