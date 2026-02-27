@@ -1,0 +1,31 @@
+// 예시: Product 서비스와 통신할 규약
+syntax = "proto3";
+
+// 자바 코드로 생성될 때의 패키지 경로 및 설정
+option java_multiple_files = true;
+option java_package = "com.timesale.common.proto.product";
+option java_outer_classname = "ProductProto";
+
+// 상품 서비스 정의 (재고 차감, 재고 복구)
+service ProductService {
+  rpc DecreaseStock (DecreaseStockRequest) returns (DecreaseStockResponse);
+  rpc IncreaseStock (IncreaseStockRequest) returns (IncreaseStockResponse);
+}
+
+message DecreaseStockRequest {
+  int64 productId = 1;
+  int32 quantity = 2;
+}
+
+message DecreaseStockResponse {
+  bool success = 1;
+}
+
+message IncreaseStockRequest {
+  int64 productId = 1;
+  int32 quantity = 2;
+}
+
+message IncreaseStockResponse {
+  bool success = 1;
+}
