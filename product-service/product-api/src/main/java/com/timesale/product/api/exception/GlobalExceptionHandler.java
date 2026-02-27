@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("Unhandle Exception: {}", e.getMessage());
+        log.error("Unhandled Exception: ", e);
         ErrorResponse response = ErrorResponse.builder()
             .status(500)
             .code("INTERNAL_SERVER_ERROR")

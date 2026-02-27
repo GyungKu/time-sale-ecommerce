@@ -1,7 +1,9 @@
 package com.timesale.product.application.port;
 
+import java.util.function.Supplier;
+
 public interface DistributedLockPort {
 
-    void executeWithLock(String lockKey, Runnable action);
+    <T> T executeWithLock(String lockKey, Supplier<T> action);
 
 }

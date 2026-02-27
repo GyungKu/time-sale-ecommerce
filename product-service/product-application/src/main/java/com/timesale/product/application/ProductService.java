@@ -35,6 +35,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    @DistributedLock(key = "'product:lock:' + #productId")
     @Transactional
     public void decreaseProductStock(Long productId, Integer quantity) {
         Product product = getById(productId);
