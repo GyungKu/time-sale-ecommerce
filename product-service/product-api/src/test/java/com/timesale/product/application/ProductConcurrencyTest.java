@@ -24,6 +24,9 @@ class ProductConcurrencyTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductLockFacade productLockFacade;
+
     private Long savedProductId;
 
     @BeforeEach
@@ -55,7 +58,7 @@ class ProductConcurrencyTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    productService.decreaseProductStock(savedProductId, 1);
+                    productLockFacade.decreaseStock(savedProductId, 1);
                 } finally {
                     latch.countDown(); // 스레드 작업이 하나 끝날 때마다 숫자 감소
                 }

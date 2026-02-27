@@ -37,7 +37,7 @@ public class ProductService {
 
     @Transactional
     public void decreaseProductStock(Long productId, Integer quantity) {
-        Product product = getByIdWithPessimisticLock(productId);
+        Product product = getById(productId);
         product.decreaseStock(quantity);
     }
 
