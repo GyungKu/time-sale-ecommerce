@@ -21,7 +21,7 @@ class ProductTest {
             .openAt(LocalDateTime.now().plusDays(1))
             .build();
 
-        product.decreaseQuantity(10);
+        product.decreaseStock(10);
 
         assertThat(product.getStockQuantity()).isEqualTo(90);
     }
@@ -36,7 +36,7 @@ class ProductTest {
             .openAt(LocalDateTime.now().plusDays(1))
             .build();
 
-        assertThatThrownBy(() -> product.decreaseQuantity(11))
+        assertThatThrownBy(() -> product.decreaseStock(11))
             .isInstanceOf(BusinessException.class)
             .hasMessage(ProductErrorCode.OUT_OF_STOCK.getMessage());
     }

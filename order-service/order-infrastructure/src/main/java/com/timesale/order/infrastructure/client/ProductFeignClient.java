@@ -12,4 +12,8 @@ public interface ProductFeignClient {
     void decreaseStock(@PathVariable("id") Long productId,
         @RequestParam("quantity") Integer quantity);
 
+    @PostMapping("/api/v1/products/{id}/increase-stock")
+    void increaseStock(@PathVariable("id") Long productId,
+        @RequestParam("quantity") Integer quantity);
+
 }
