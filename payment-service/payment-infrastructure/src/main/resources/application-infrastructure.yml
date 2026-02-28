@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:timesale;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+pg:
+  fake:
+    base_url: http://localhost:8000
+
+grpc:
+  client:
+    order-server:
+      address: static://localhost:9091
+      negotiation-type: plaintext
