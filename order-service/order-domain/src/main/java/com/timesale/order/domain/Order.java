@@ -42,10 +42,10 @@ public class Order {
     private LocalDateTime createdAt;
 
     @Builder
-    public Order(Long userId, Integer totalPrice, OrderStatus status) {
+    public Order(Long userId, Integer totalPrice) {
         this.userId = userId;
         this.totalPrice = totalPrice;
-        this.status = status;
+        this.status = OrderStatus.PENDING;
     }
 
     public void complete() {
