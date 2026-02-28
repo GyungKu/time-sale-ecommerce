@@ -1,7 +1,6 @@
 dependencies {
     implementation(project(":product-service:product-domain"))
     implementation(project(":product-service:product-application"))
-    implementation(project(":common:common-exception"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")

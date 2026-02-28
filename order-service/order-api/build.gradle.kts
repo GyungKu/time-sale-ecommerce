@@ -8,7 +8,6 @@ dependencies {
     implementation(project(":order-service:order-infrastructure"))
     implementation(project(":common:common-security"))
 
-    implementation(project(":common:common-exception"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 }
