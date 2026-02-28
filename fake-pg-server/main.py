@@ -36,6 +36,7 @@ def prepare_payment(req: PrepareRequest):
 # 프론트에서 결제하고 authKey 받음
 @app.post("/pg/auth")
 def authenticate_payment(req: AuthRequest):
+  print(req.orderId)
   payment = payments_db.get(req.orderId)
 
   # 사전 등록된 주문인지 체크
