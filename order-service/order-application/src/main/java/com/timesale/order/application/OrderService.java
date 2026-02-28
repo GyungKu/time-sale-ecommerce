@@ -4,10 +4,10 @@ import com.timesale.common.exception.BusinessException;
 import com.timesale.order.application.port.ProductClient;
 import com.timesale.order.domain.Order;
 import com.timesale.order.domain.OrderItem;
-import com.timesale.order.domain.OrderStatus;
 import com.timesale.order.domain.exception.OrderErrorCode;
 import com.timesale.order.domain.port.OrderItemRepository;
 import com.timesale.order.domain.port.OrderRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,11 @@ public class OrderService {
             rollbackStock(productId, quantity);
             throw new BusinessException(OrderErrorCode.ORDER_SAVE_FAIL);
         }
+    }
+
+    public Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+            .orElseThrow(() -> new BusinessException(OrderErrorCode.NOT_FOUND));
     }
 
     private void rollbackStock(Long productId, Integer quantity) {
