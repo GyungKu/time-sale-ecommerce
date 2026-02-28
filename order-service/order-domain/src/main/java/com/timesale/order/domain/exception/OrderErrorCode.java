@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum OrderErrorCode implements ErrorCode {
 
-    ORDER_SAVE_FAIL(500, "O001", "주문 저장 중 문제가 발생했습니다.");
+    ORDER_SAVE_FAIL(500, "O001", "주문 저장 중 문제가 발생했습니다."),
+    NOT_FOUND(404, "O002", "상품을 찾을 수 없습니다.")
+    ;
 
     private final Integer status;
     private final String code;
