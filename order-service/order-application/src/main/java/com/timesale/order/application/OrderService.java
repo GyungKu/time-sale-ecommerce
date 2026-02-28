@@ -29,7 +29,6 @@ public class OrderService {
             Integer totalPrice = orderPrice * quantity;
             Order order = Order.builder()
                 .userId(userId)
-                .status(OrderStatus.COMPLETED)
                 .totalPrice(totalPrice)
                 .build();
 
