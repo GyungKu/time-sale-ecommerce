@@ -22,3 +22,9 @@ include("order-service:order-api")
 include("order-service:order-application")
 include("order-service:order-domain")
 include("order-service:order-infrastructure")
+
+// Payment 서비스 모듈들 추가
+include("payment-service:payment-api")
+include("payment-service:payment-application")
+include("payment-service:payment-domain")
+include("payment-service:payment-infrastructure")
