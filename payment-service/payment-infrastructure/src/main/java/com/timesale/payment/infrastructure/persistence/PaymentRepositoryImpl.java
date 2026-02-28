@@ -2,6 +2,7 @@ package com.timesale.payment.infrastructure.persistence;
 
 import com.timesale.payment.domain.Payment;
 import com.timesale.payment.domain.port.PaymentRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +10,15 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class PaymentRepositoryImpl implements PaymentRepository {
 
-    private final PaymentRepository paymentRepository;
+    private final PaymentJpaRepository paymentJpaRepository;
 
     @Override
     public void save(Payment payment) {
-        paymentRepository.save(payment);
+        paymentJpaRepository.save(payment);
+    }
+
+    @Override
+    public Optional<Payment> findByOrderId(Long orderId) {
+        return paymentJpaRepository.findByOrderId(orderId);
     }
 }
