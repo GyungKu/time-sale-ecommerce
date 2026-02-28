@@ -44,7 +44,7 @@ class ProductConcurrencyTest {
     }
 
     @Test
-    @DisplayName("100명이 동시에 주문을 해도 비관적 락으로 인해 성공한다.")
+    @DisplayName("100명이 동시에 주문을 해도 락으로 인해 성공한다.")
     void decreaseStock_concurrency_success() throws InterruptedException {
 
         int threadCount = 100;
