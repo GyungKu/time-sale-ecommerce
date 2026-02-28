@@ -20,3 +20,9 @@ spring:
 
 product:
   base_url: http://localhost:8081/
+
+grpc:
+  client:
+    product-server:
+      address: static://localhost:9090
+      negotiation-type: plaintext

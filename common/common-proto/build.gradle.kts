@@ -7,8 +7,10 @@ plugins {
 
 dependencies {
     // gRPC와 Protobuf의 핵심 라이브러리들
-    implementation("io.grpc:grpc-protobuf:1.76.3")
-    implementation("io.grpc:grpc-stub:1.76.3")
+    implementation("io.grpc:grpc-protobuf:1.63.0")
+    implementation("io.grpc:grpc-stub:1.63.0")
+    compileOnly("jakarta.annotation:jakarta.annotation-api:2.1.1")
+
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
 }
 
@@ -20,7 +22,7 @@ protobuf {
     }
     plugins {
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.60.0"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.63.0"
         }
     }
     generateProtoTasks {

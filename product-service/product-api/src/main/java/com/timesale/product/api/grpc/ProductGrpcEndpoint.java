@@ -1,5 +1,6 @@
 package com.timesale.product.api.grpc;
 
+import com.timesale.common.exception.BusinessException;
 import com.timesale.common.proto.product.DecreaseStockRequest;
 import com.timesale.common.proto.product.DecreaseStockResponse;
 import com.timesale.common.proto.product.IncreaseStockRequest;
@@ -37,11 +38,17 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+        } catch (BusinessException e) {
+            log.error("gRPC 재고 차감 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
+                request.getProductId(), e.getMessage());
+
+            responseObserver.onError(Status.FAILED_PRECONDITION
+                .withDescription(e.getErrorCode().getCode())
+                .asRuntimeException());
         } catch (Exception e) {
-            log.error("gRPC 재고 차감 실패", e);
+            log.error("gRPC 시스템 에러 발생", e);
             responseObserver.onError(Status.INTERNAL
-                .withDescription(e.getMessage())
-                .withCause(e)
+                .withDescription("서버 내부 오류가 발생했습니다.")
                 .asRuntimeException());
         }
     }
@@ -64,11 +71,18 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+        } catch (BusinessException e) {
+            log.error("gRPC 재고 복구 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
+                request.getProductId(), e.getMessage());
+
+            responseObserver.onError(Status.FAILED_PRECONDITION
+                .withDescription(e.getErrorCode().getCode())
+                .asRuntimeException());
+
         } catch (Exception e) {
-            log.error("gRPC 재고 차감 실패", e);
+            log.error("gRPC 시스템 에러 발생", e);
             responseObserver.onError(Status.INTERNAL
-                .withDescription(e.getMessage())
-                .withCause(e)
+                .withDescription("서버 내부 오류가 발생했습니다.")
                 .asRuntimeException());
         }
     }
