@@ -41,7 +41,7 @@ public class Payment {
     public enum PaymentStatus {
         READY,
         SUCCESS,
-        FAILED
+        FAIL
     }
 
     public static Payment prepare(Long orderId, Integer amount) {
@@ -58,6 +58,6 @@ public class Payment {
     }
 
     public void fail() {
-        status = PaymentStatus.FAILED;
+        status = PaymentStatus.FAIL;
     }
 }

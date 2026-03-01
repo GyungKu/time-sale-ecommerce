@@ -45,23 +45,34 @@ public class PaymentService {
 
         if (!payment.getAmount().equals(amount)) {
             payment.fail();
+            publishPaymentEvents(orderId, payment);
             throw new BusinessException(PaymentErrorCode.INVALID_AMOUNT);
         }
 
-        PgResponse response = pgClient.confirmPayment(payment, authKey);
-        payment.confirm(response.receiptUrl());
-        log.info("결제 최종 승인 완료! - orderId: {}", orderId);
+        try {
+            PgResponse response = pgClient.confirmPayment(payment, authKey);
+            payment.confirm(response.receiptUrl());
 
-        log.info("Kafka 결제 완료 이벤트 직접 발행 요청 - orderId: {}", orderId);
-        messageQueue.publish("payment-events",
-            new PaymentResultMessage(orderId, payment.getStatus().name()));
-
-        return response;
+            log.info("결제 최종 승인 완료! - orderId: {}", orderId);
+            log.info("Kafka 결제 완료 이벤트 직접 발행 요청 - orderId: {}", orderId);
+            return response;
+        } catch (BusinessException e) {
+            log.info("Kafka 결제 실패 이벤트 직접 발행 요청 - orderId: {}", orderId);
+            payment.fail();
+            throw e;
+        } finally {
+            publishPaymentEvents(orderId, payment);
+        }
     }
 
     private Payment getByOrderId(Long orderId) {
         return paymentRepository.findByOrderId(orderId)
             .orElseThrow(() -> new BusinessException(PaymentErrorCode.NOT_FOUND_BY_ORDER_ID));
+    }
+
+    private void publishPaymentEvents(Long orderId, Payment payment) {
+        messageQueue.publish("payment-events",
+            new PaymentResultMessage(orderId, payment.getStatus().name()));
     }
 
 }
