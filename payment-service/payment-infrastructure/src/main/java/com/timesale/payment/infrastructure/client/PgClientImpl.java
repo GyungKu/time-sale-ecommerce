@@ -39,12 +39,9 @@ public class PgClientImpl implements PgClient {
                     payment.getAmount(), authKey));
 
             return response.toPgResponse();
-
         } catch (FeignException e) {
             log.error("PG 서버 결제 검증 요청 실패: status={}, body={}",
                 e.status(), e.contentUTF8());
-            payment.fail();
-
             throw new BusinessException(PgExternalErrorCode.findByStatus(e.status())
                 .orElse(PgExternalErrorCode.EXTERNAL_SERVER_ERROR));
         }

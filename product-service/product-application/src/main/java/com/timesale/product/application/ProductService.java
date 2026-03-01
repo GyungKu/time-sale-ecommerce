@@ -43,8 +43,9 @@ public class ProductService {
     }
 
     @Transactional
+    @DistributedLock(key = "'product:lock:' + #productId")
     public void increaseProductStock(Long productId, Integer quantity) {
-        Product product = getByIdWithPessimisticLock(productId);
+        Product product = getById(productId);
         product.increaseStock(quantity);
     }
 

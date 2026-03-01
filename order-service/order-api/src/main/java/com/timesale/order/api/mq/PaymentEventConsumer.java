@@ -16,10 +16,15 @@ public class PaymentEventConsumer {
 
     @KafkaListener(topics = "payment-events")
     public void consumePaymentEvent(PaymentResultMessage message) {
-        log.info("Kafka 결제 완료 이벤트 수신: {}", message.orderId());
-
-        if (message.status().equals("SUCCESS"))
+        if (message.status().equals("SUCCESS")) {
+            log.info("Kafka 결제 성공 이벤트 수신: {}", message.orderId());
             orderService.completeOrder(message.orderId());
+        }
+
+        if (message.status().equals("FAIL")) {
+            log.info("Kafka 결제 실패 이벤트 수신: {}", message.orderId());
+            orderService.failOrder(message.orderId());
+        }
     }
 
 }
