@@ -15,3 +15,10 @@ jwt:
 grpc:
   server:
     port: 9091
+
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    enabled: true
+    group-id: order-service-group
+    auto-offset-reset: latest
