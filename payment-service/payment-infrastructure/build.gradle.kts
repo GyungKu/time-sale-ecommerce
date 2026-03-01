@@ -2,6 +2,7 @@ dependencies {
     implementation(project(":payment-service:payment-domain"))
     implementation(project(":payment-service:payment-application"))
     implementation(project(":common:common-proto"))
+    implementation(project(":common:common-kafka"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
@@ -10,4 +11,6 @@ dependencies {
 
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
+
+    implementation("org.springframework.kafka:spring-kafka")
 }

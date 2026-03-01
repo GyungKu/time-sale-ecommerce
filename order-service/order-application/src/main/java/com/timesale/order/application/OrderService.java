@@ -51,6 +51,13 @@ public class OrderService {
         }
     }
 
+    @Transactional
+    public void completeOrder(Long orderId) {
+        Order order = getOrder(orderId);
+        order.complete();
+        log.info("주문 번호 [{}] 결제 완료 처리 성공", orderId);
+    }
+
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
             .orElseThrow(() -> new BusinessException(OrderErrorCode.NOT_FOUND));

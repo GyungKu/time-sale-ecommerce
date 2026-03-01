@@ -4,6 +4,7 @@ rootProject.name = "time-sale-ecommerce"
 include("common:common-exception")
 include("common:common-security")
 include("common:common-proto")
+include("common:common-kafka")
 
 // User 서비스 모듈들
 include("user-service:user-api")

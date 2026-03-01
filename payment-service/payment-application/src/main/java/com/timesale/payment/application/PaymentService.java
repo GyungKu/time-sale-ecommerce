@@ -1,7 +1,9 @@
 package com.timesale.payment.application;
 
 import com.timesale.common.exception.BusinessException;
+import com.timesale.payment.application.dto.message.PaymentResultMessage;
 import com.timesale.payment.application.dto.response.PgResponse;
+import com.timesale.payment.application.port.MessageQueuePort;
 import com.timesale.payment.application.port.OrderClient;
 import com.timesale.payment.application.port.PgClient;
 import com.timesale.payment.domain.Payment;
@@ -20,6 +22,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PgClient pgClient;
     private final OrderClient orderClient;
+    private final MessageQueuePort messageQueue;
 
     @Transactional
     public void preparePayment(Long orderId) {
@@ -45,8 +48,15 @@ public class PaymentService {
             throw new BusinessException(PaymentErrorCode.INVALID_AMOUNT);
         }
 
+        PgResponse response = pgClient.confirmPayment(payment, authKey);
+        payment.confirm(response.receiptUrl());
         log.info("결제 최종 승인 완료! - orderId: {}", orderId);
-        return pgClient.confirmPayment(payment, authKey);
+
+        log.info("Kafka 결제 완료 이벤트 직접 발행 요청 - orderId: {}", orderId);
+        messageQueue.publish("payment-events",
+            new PaymentResultMessage(orderId, payment.getStatus().name()));
+
+        return response;
     }
 
     private Payment getByOrderId(Long orderId) {

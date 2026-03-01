@@ -27,3 +27,8 @@ grpc:
     order-server:
       address: static://localhost:9091
       negotiation-type: plaintext
+
+kafka:
+  bootstrap-servers: localhost:9092
+  producer:
+    enabled: true
