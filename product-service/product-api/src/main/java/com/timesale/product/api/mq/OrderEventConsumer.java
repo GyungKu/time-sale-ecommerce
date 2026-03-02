@@ -18,7 +18,8 @@ public class OrderEventConsumer {
     @KafkaListener(topics = "order-fail-events")
     public void consumePaymentEvent(@Payload OrderFailMessage message) {
         log.info("Kafka 주문 실패 이벤트 수신: {}", message.productId());
-        productService.increaseProductStock(message.productId(), message.quantity());
+        productService.restoreProductStock(message.productId(), message.quantity(),
+            message.orderItemId());
     }
 
 }
