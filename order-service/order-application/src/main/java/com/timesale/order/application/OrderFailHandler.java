@@ -25,7 +25,7 @@ public class OrderFailHandler {
         log.info("주문 번호 [{}] 결제 실패 처리 성공", order.getId());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void rollbackStockPublish(Long productId, Integer quantity) {
         OrderFailMessage message = new OrderFailMessage(productId, quantity);
         messageQueue.publish("order-fail-events", message);
