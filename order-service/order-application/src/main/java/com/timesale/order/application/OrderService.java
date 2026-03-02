@@ -45,14 +45,20 @@ public class OrderService {
     @Transactional
     public void completeOrder(Long orderId) {
         Order order = getOrderByOrderId(orderId);
-        order.isAlreadyOrder();
+        if (order.isAlreadyOrder()) {
+            log.info("이미 처리된 주문입니다. - orderId: {}", orderId);
+            return;
+        }
         order.complete();
         log.info("주문 번호 [{}] 결제 완료 처리 성공", orderId);
     }
 
     public void failOrder(Long orderId) {
         Order order = getOrderByOrderId(orderId);
-        order.isAlreadyOrder();
+        if (order.isAlreadyOrder()) {
+            log.info("이미 처리된 주문입니다. - orderId: {}", orderId);
+            return;
+        }
         OrderItem orderItem = getOrderItemByOrderId(orderId);
         order.fail();
         orderFailHandler.failOrder(order, orderItem.getProductId(), orderItem.getQuantity());
