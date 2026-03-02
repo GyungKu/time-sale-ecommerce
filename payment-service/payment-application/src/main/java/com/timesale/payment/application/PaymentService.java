@@ -49,26 +49,21 @@ public class PaymentService {
             throw new BusinessException(PaymentErrorCode.INVALID_AMOUNT);
         }
 
-        try {
-            PgResponse response = pgClient.confirmPayment(payment, authKey);
-            payment.confirm(response.receiptUrl());
-            log.info("결제 최종 승인 완료! - orderId: {}", orderId);
-            paymentResultHandler.saveAndPublish(payment);
-            return response;
-        } catch (BusinessException e) {
-            failPayment(payment);
-            throw e;
-        }
+        PgResponse response = pgClient.confirmPayment(payment, authKey);
+        payment.confirm(response.receiptUrl());
+        log.info("결제 최종 승인 완료! - orderId: {}", orderId);
+        paymentResultHandler.saveAndPublish(payment);
+        return response;
+    }
+
+    public void failPayment(Payment payment) {
+        payment.fail();
+        paymentResultHandler.saveAndPublish(payment);
     }
 
     private Payment getByOrderId(Long orderId) {
         return paymentRepository.findByOrderId(orderId)
             .orElseThrow(() -> new BusinessException(PaymentErrorCode.NOT_FOUND_BY_ORDER_ID));
-    }
-
-    private void failPayment(Payment payment) {
-        payment.fail();
-        paymentResultHandler.saveAndPublish(payment);
     }
 
 }
