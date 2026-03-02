@@ -55,4 +55,8 @@ public class Order {
     public void fail() {
         this.status = OrderStatus.FAILED;
     }
+
+    public Boolean isAlreadyOrder() {
+        return !status.equals(OrderStatus.PENDING);
+    }
 }
