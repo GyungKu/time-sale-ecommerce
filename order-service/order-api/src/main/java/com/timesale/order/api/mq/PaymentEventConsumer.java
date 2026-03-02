@@ -5,6 +5,7 @@ import com.timesale.order.application.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -15,7 +16,7 @@ public class PaymentEventConsumer {
     private final OrderService orderService;
 
     @KafkaListener(topics = "payment-events")
-    public void consumePaymentEvent(PaymentResultMessage message) {
+    public void consumePaymentEvent(@Payload PaymentResultMessage message) {
         if (message.status().equals("SUCCESS")) {
             log.info("Kafka 결제 성공 이벤트 수신: {}", message.orderId());
             orderService.completeOrder(message.orderId());

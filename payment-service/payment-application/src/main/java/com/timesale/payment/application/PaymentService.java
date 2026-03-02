@@ -1,12 +1,11 @@
 package com.timesale.payment.application;
 
 import com.timesale.common.exception.BusinessException;
-import com.timesale.payment.application.dto.message.PaymentResultMessage;
 import com.timesale.payment.application.dto.response.PgResponse;
-import com.timesale.payment.application.port.MessageQueuePort;
 import com.timesale.payment.application.port.OrderClient;
 import com.timesale.payment.application.port.PgClient;
 import com.timesale.payment.domain.Payment;
+import com.timesale.payment.domain.Payment.PaymentStatus;
 import com.timesale.payment.domain.exception.PaymentErrorCode;
 import com.timesale.payment.domain.port.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PgClient pgClient;
     private final OrderClient orderClient;
-    private final MessageQueuePort messageQueue;
+    private final PaymentResultHandler paymentResultHandler;
 
     @Transactional
     public void preparePayment(Long orderId) {
@@ -39,29 +38,26 @@ public class PaymentService {
         log.info("결제 사전 등록 완료 - orderId: {}, amount: {}", orderId, realAmount);
     }
 
-    @Transactional
     public PgResponse confirmPayment(Long orderId, Integer amount, String authKey) {
         Payment payment = getByOrderId(orderId);
 
+        if (!payment.getStatus().equals(PaymentStatus.READY))
+            throw new BusinessException(PaymentErrorCode.ALREADY_PAYMENT);
+
         if (!payment.getAmount().equals(amount)) {
-            payment.fail();
-            publishPaymentEvents(orderId, payment);
+            failPayment(payment);
             throw new BusinessException(PaymentErrorCode.INVALID_AMOUNT);
         }
 
         try {
             PgResponse response = pgClient.confirmPayment(payment, authKey);
             payment.confirm(response.receiptUrl());
-
             log.info("결제 최종 승인 완료! - orderId: {}", orderId);
-            log.info("Kafka 결제 완료 이벤트 직접 발행 요청 - orderId: {}", orderId);
+            paymentResultHandler.saveAndPublish(payment);
             return response;
         } catch (BusinessException e) {
-            log.info("Kafka 결제 실패 이벤트 직접 발행 요청 - orderId: {}", orderId);
-            payment.fail();
+            failPayment(payment);
             throw e;
-        } finally {
-            publishPaymentEvents(orderId, payment);
         }
     }
 
@@ -70,9 +66,9 @@ public class PaymentService {
             .orElseThrow(() -> new BusinessException(PaymentErrorCode.NOT_FOUND_BY_ORDER_ID));
     }
 
-    private void publishPaymentEvents(Long orderId, Payment payment) {
-        messageQueue.publish("payment-events",
-            new PaymentResultMessage(orderId, payment.getStatus().name()));
+    private void failPayment(Payment payment) {
+        payment.fail();
+        paymentResultHandler.saveAndPublish(payment);
     }
 
 }

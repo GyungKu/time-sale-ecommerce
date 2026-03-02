@@ -1,11 +1,10 @@
 package com.timesale.order.application;
 
 import com.timesale.common.exception.BusinessException;
-import com.timesale.order.application.dto.message.OrderFailMessage;
-import com.timesale.order.application.port.MessageQueuePort;
 import com.timesale.order.application.port.ProductClient;
 import com.timesale.order.domain.Order;
 import com.timesale.order.domain.OrderItem;
+import com.timesale.order.domain.OrderStatus;
 import com.timesale.order.domain.exception.OrderErrorCode;
 import com.timesale.order.domain.port.OrderItemRepository;
 import com.timesale.order.domain.port.OrderRepository;
@@ -22,9 +21,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductClient productClient;
-    private final MessageQueuePort messageQueue;
+    private final OrderFailHandler orderFailHandler;
+    private final OrderStore orderStore;
 
-    @Transactional
+
     public Long placeOrder(Long userId, Long productId, Integer quantity, Integer orderPrice) {
         productClient.decreaseStock(productId, quantity);
         try {
@@ -34,48 +34,34 @@ public class OrderService {
                 .totalPrice(totalPrice)
                 .build();
 
-            Order savedOrder = orderRepository.save(order);
-
-            OrderItem orderItem = OrderItem.builder()
-                .orderId(savedOrder.getId())
-                .productId(productId)
-                .quantity(quantity)
-                .orderPrice(orderPrice)
-                .build();
-
-            orderItemRepository.save(orderItem);
-
-            return savedOrder.getId();
+            return orderStore.saveOrder(order, productId, quantity, orderPrice);
         } catch (Exception e) {
             log.error("주문 DB 저장 중 에러 발생. 재고 복구 보상 트랜잭션을 시작합니다.", e);
-            rollbackStockPublish(productId, quantity);
+            orderFailHandler.rollbackStockPublish(productId, quantity);
             throw new BusinessException(OrderErrorCode.ORDER_SAVE_FAIL);
         }
     }
 
     @Transactional
     public void completeOrder(Long orderId) {
-        getOrder(orderId).complete();
+        Order order = getOrderByOrderId(orderId);
+        order.isAlreadyOrder();
+        order.complete();
         log.info("주문 번호 [{}] 결제 완료 처리 성공", orderId);
     }
 
-    @Transactional
     public void failOrder(Long orderId) {
+        Order order = getOrderByOrderId(orderId);
+        order.isAlreadyOrder();
         OrderItem orderItem = getOrderItemByOrderId(orderId);
-        Order order = orderItem.getOrder();
         order.fail();
-        rollbackStockPublish(orderItem.getProductId(), orderItem.getQuantity());
-        log.info("주문 번호 [{}] 결제 실패 처리 성공", orderId);
+        orderFailHandler.failOrder(order, orderItem.getProductId(), orderItem.getQuantity());
     }
 
-    public Order getOrder(Long orderId) {
+    @Transactional(readOnly = true)
+    public Order getOrderByOrderId(Long orderId) {
         return orderRepository.findById(orderId)
             .orElseThrow(() -> new BusinessException(OrderErrorCode.NOT_FOUND));
-    }
-
-    private void rollbackStockPublish(Long productId, Integer quantity) {
-        OrderFailMessage message = new OrderFailMessage(productId, quantity);
-        messageQueue.publish("order-fail-events", message);
     }
 
     private OrderItem getOrderItemByOrderId(Long orderId) {

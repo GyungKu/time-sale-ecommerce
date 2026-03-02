@@ -5,6 +5,7 @@ include("common:common-exception")
 include("common:common-security")
 include("common:common-proto")
 include("common:common-kafka")
+include("common:common-outbox")
 
 // User 서비스 모듈들
 include("user-service:user-api")

@@ -25,7 +25,7 @@ public class OrderGrpcEndpoint extends OrderServiceGrpc.OrderServiceImplBase {
 
         try {
             long orderId = request.getOrderId();
-            Order order = orderService.getOrder(orderId);
+            Order order = orderService.getOrderByOrderId(orderId);
 
             GetOrderResponse response = GetOrderResponse.newBuilder()
                 .setOrderId(order.getId())

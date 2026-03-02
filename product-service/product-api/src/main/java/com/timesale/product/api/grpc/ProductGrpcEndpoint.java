@@ -28,7 +28,7 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
             long productId = request.getProductId();
             int quantity = request.getQuantity();
 
-            log.info("gRPC 재고 차감 요청 수신 - productId: {}, quantity: {}", productId, quantity);
+            log.info("재고 차감 요청 수신 - productId: {}, quantity: {}", productId, quantity);
 
             productService.decreaseProductStock(productId, quantity);
 
@@ -39,14 +39,14 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BusinessException e) {
-            log.error("gRPC 재고 차감 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
+            log.error("재고 차감 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
                 request.getProductId(), e.getMessage());
 
             responseObserver.onError(Status.FAILED_PRECONDITION
                 .withDescription(e.getErrorCode().getCode())
                 .asRuntimeException());
         } catch (Exception e) {
-            log.error("gRPC 시스템 에러 발생", e);
+            log.error("재고 차감 중 시스템 에러 발생", e);
             responseObserver.onError(Status.INTERNAL
                 .withDescription("서버 내부 오류가 발생했습니다.")
                 .asRuntimeException());
@@ -61,7 +61,7 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
             long productId = request.getProductId();
             int quantity = request.getQuantity();
 
-            log.info("gRPC 재고 복구 요청 수신 - productId: {}, quantity: {}", productId, quantity);
+            log.info("재고 복구 요청 수신 - productId: {}, quantity: {}", productId, quantity);
 
             productService.decreaseProductStock(productId, quantity);
 
@@ -72,7 +72,7 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (BusinessException e) {
-            log.error("gRPC 재고 복구 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
+            log.error("재고 복구 중 비즈니스 예외 발생 - productId: {}, 원인: {}",
                 request.getProductId(), e.getMessage());
 
             responseObserver.onError(Status.FAILED_PRECONDITION
@@ -80,7 +80,7 @@ public class ProductGrpcEndpoint extends ProductServiceGrpc.ProductServiceImplBa
                 .asRuntimeException());
 
         } catch (Exception e) {
-            log.error("gRPC 시스템 에러 발생", e);
+            log.error("재고 복구 중 시스템 에러 발생", e);
             responseObserver.onError(Status.INTERNAL
                 .withDescription("서버 내부 오류가 발생했습니다.")
                 .asRuntimeException());
